@@ -6,19 +6,19 @@ Fingerprints can be reliable tools for asserting ownership and tracing data leak
 
 >**Your task in this exercise is to hack the fingerprint :)**
 
-## Exercise description
+### Exercise description
 This exercise is organised into two phases:
 1. **Phase 1: Break the fingerprint!** -- In this phase you will get one fingerprinted dataset copy and act maliciously in the attempt to remove the fingerprint. See the details [here](phase1.md).
 2. **Phase 2: Collaboration attack** -- In this phase you will have access to multiple fingerprinted copies to achieve the same malicious goal. See the details [here](phase2.md).
 
-## Submission guidelines
+### Submission guidelines
 The exercise is evaluated based on the detail and the reproducibility of the report. 
 You are expected to describe your attempts (successful and failed), your thought process and reasoning and answer in detailed the questions associated to each phase.
 Attack success is an important factor, but will not be the deciding one when it comes to grading. 
 
 The submission guidelines and deadlines are available [here](submission.md).
 
-## Datasets, methods and support
+### Datasets, methods and support
 For each phase, you will obtain the datasets to work with. You can access the data [here](datasets.md).
 
 If you are interested to explore fingerprinting in more detail, you can read the [documentation](fingerprinting.md) and access the code. 

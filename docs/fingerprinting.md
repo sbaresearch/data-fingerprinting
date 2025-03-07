@@ -35,6 +35,56 @@ During the fingerprint detection, this process is reversed to decode the embedde
 
 The upper row represents the votes for bit 0 per bit-position, and the lower row represents the votes for bit 1 per bit-position. According to the majority vote, the fingerprint is decided to be the 16-bit sequence: 0100000001100100 which in a correct setup is the exact sequence associated to the recipient of the data copy. In reality, the fingerprint sequences are much longer (>100-bit) to ensure a small mutual overlap.
 
+## Getting started 
+### Installation
+You can use the fingerprinting tool by cloning this repository:
+```
+$ git clone https://github.com/sbaresearch/data-fingerprinting.git
+```
+Install dependencies:
+```
+pip install -r requirements.txt
+```
+
+### Fingerprint embedding
+Run ```embedding.py``` with arguments specifying:
+- data file
+- secret key (used also to correctly detect the fingerprint)
+- user's ID
+
+Optional arguments include fingerprint parameters such as gamma (a probability of marking a single record is 1/gamma), fingerprint length, output file, log file and config file where some additional parameters can be specified.
+
+For example, the command:
+```
+python embedding.py speml/Financial_Records.csv 177264 10 
+```
+will run the embedding on the dataset speml/Financial_Records.csv with (your) secret key 177264 for the recipient with the ID=10 (for simplicity, we keep the user IDs as sequential integers).
+It will also read the example config file ```speml/config.json```. The embedding might take a few minutes.
+
+The fingerprinted data is by default written in ```fingerprinted_output.csv``` in the root directory (this can be changed by specifying argument ```--out [another_dest].csv```).
+
+The script will also output a ```log.json``` file consisting of the summary of used parameters. These exact parameters need to be used in the detection process for the correct fingerprint extraction (along with the correct secret key).
+
+### Fingerprint detection
+Run ```detection.py``` with arguments specifying:
+- data file
+- secret key (only the correct secret key will lead to successful detection)
+
+Optional arguments include fingerprint parameters such as gamma, fingerprint length, output file, log file and config file where some additional parameters can be specified.
+Note that you _need_ to use the same parameters as in the embedding.
+
+Continuing from the embedding example, the command:
+```
+python detection.py fingerprinted_output.csv 177264  
+```
+will run the detection algorithm on ```fingerprinted_output.csv``` file with your secret key 1177264. 
+The expected output is the ID of the user (in this case, 10) and detection confidence (1.0 for a perfect match).
+
+_Troubleshooting:_ If the detection fails in a seemingly normal scenario, it might be due to a couple of preventable reasons. 
+Firstly, the passed arguments and fingerprint parameters need to match exactly, so double-check the passed arguments and config file. 
+Secondly, sometimes the choice of parameters (mainly gamma and fingerprint length) is not robust enough for given dataset; the rule of thumb is to ensure #data_records/(gamma*fp_len)>20.
+If you run into other issues, feel free to [contact us]().
+
 ## References: 
 [1] Li, Y., Swarup, V. and Jajodia, S., 2005. Fingerprinting relational databases: Schemes and specialties. IEEE Transactions on Dependable and Secure Computing, 2(1), pp.34-45.\
 [2] Al Solami, E., Kamran, M., Saeed Alkatheiri, M., Rafiq, F. and Alghamdi, A.S., 2020. Fingerprinting of relational databases for stopping the data theft. Electronics, 9(7), p.1093.\

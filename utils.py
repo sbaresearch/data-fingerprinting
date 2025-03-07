@@ -8,18 +8,22 @@ import warnings
 from traceback import format_exc
 from astropy.table import Table
 from joblib import Parallel
+import datasets
+from copy import deepcopy
 
-from sklearn.utils.validation import _check_fit_params, _num_samples
+from sklearn.utils.validation import _num_samples # _check_fit_params,
 from sklearn.utils.metaestimators import _safe_split
 from sklearn.utils import indexable
-from sklearn.utils.fixes import delayed
+#from sklearn.utils.fixes import delayed
 from sklearn.base import clone, is_classifier
 from sklearn.model_selection._validation import _score, _aggregate_score_dicts, _normalize_score_results, _insert_error_scores
 from sklearn.model_selection._split import check_cv
 from sklearn.exceptions import FitFailedWarning
 from sklearn.metrics._scorer import check_scoring, _check_multimetric_scoring
+from scipy.stats import chi2_contingency
 
-from datasets import Dataset
+import datasets
+
 
 # returns the pandas structure of the dataset and its primary key
 def import_dataset(dataset_name):
@@ -125,12 +129,12 @@ def _read_data(dataset, primary_key_attribute=None, target_attribute=None):
     '''
     relation = None
     if isinstance(dataset, str):  # assumed the path is given
-        relation = Dataset(path=dataset, target_attribute=target_attribute,
+        relation = datasets.Dataset(path=dataset, target_attribute=target_attribute,
                            primary_key_attribute=primary_key_attribute)
     elif isinstance(dataset, pd.DataFrame):  # assumed the pd.DataFrame is given
-        relation = Dataset(dataframe=dataset, target_attribute=target_attribute,
+        relation = datasets.Dataset(dataframe=dataset, target_attribute=target_attribute,
                            primary_key_attribute=primary_key_attribute)
-    elif isinstance(dataset, Dataset):
+    elif isinstance(dataset, datasets.Dataset):
         relation = dataset
     else:
         print('Wrong type of input data.')
@@ -371,8 +375,174 @@ def fp_cross_val_score(estimator, X_original, y_original, X_fingerprint, y_finge
 
     return ret
 
+def read_data(dataset, primary_key_attribute=None, target_attribute=None, correlated_attributes=None):
+    '''
+    Creates the instance of Dataset for given data.
+    :param dataset: string, pandas dataframe or Dataset
+    :param primary_key_attribute: name of the primary key attribute
+    :param target_attribute: name of the target attribute
+    :return: Dataset instance
+    '''
+    relation = None
+    if isinstance(dataset, str):  # assumed the path is given
+        relation = datasets.Dataset(path=dataset, target_attribute=target_attribute,
+                           primary_key_attribute=primary_key_attribute, correlated_attributes=correlated_attributes)
+    elif isinstance(dataset, pd.DataFrame):  # assumed the pd.DataFrame is given
+        relation = datasets.Dataset(dataframe=dataset.copy(deep=True), target_attribute=target_attribute,
+                           primary_key_attribute=primary_key_attribute)
+    elif isinstance(dataset, datasets.Dataset):
+        relation = deepcopy(dataset)
+    else:
+        print('Error [utils._read_data]: Wrong type of input data: ' + str(type(dataset)))
+        exit()
+    return relation
 
-def latex_to_pandas(path):
-    tab = Table.read(path).to_pandas()
-    # todo: in the latex version there might be necessary to remove some parts like \toprule
-    return tab
+def cramers_v(x, y):
+    """
+        Calculate Cramér's V for two categorical attributes.
+
+        Args:
+        x (pd.Series): First categorical variable.
+        y (pd.Series): Second categorical variable.
+
+        Returns:
+        float: Cramér's V statistic.
+        """
+    # Create a contingency table
+    contingency_table = pd.crosstab(x, y)
+
+    # Perform chi-squared test
+    chi2, _, _, _ = chi2_contingency(contingency_table)
+
+    # Calculate Cramér's V
+    n = contingency_table.sum().sum()  # Total number of observations
+    min_dim = min(contingency_table.shape) - 1  # Minimum of rows - 1 or columns - 1
+    return np.sqrt(chi2 / (n * min_dim))
+
+
+def eta_squared(dataframe, categorical_col, numerical_col):
+    """
+        Calculate Eta-squared to measure the association between a categorical
+        and a numerical variable.
+
+        Args:
+        df (pd.DataFrame): DataFrame containing the data.
+        categorical_col (str): Column name of the categorical variable.
+        numerical_col (str): Column name of the numerical variable.
+
+        Returns:
+        float: Eta-squared value.
+        """
+    # Group the data by the categorical variable
+    group_means = dataframe.groupby(categorical_col)[numerical_col].mean()
+    overall_mean = dataframe[numerical_col].mean()
+
+    # Calculate SS_between
+    ss_between = sum(dataframe[categorical_col].value_counts()[group] * (mean - overall_mean) ** 2
+                     for group, mean in group_means.items())
+
+    # Calculate SS_total
+    ss_total = sum((dataframe[numerical_col] - overall_mean) ** 2)
+
+    # Eta-squared
+    eta_squared_value = ss_between / ss_total
+    return eta_squared_value
+
+
+def extract_mutually_correlated_pairs(dataframe, threshold_num=0.80, threshold_cat=0.55, threshold_numcat=0.14):
+    """
+    Extract pairs of mutually correlated attributes based on a correlation threshold.
+
+    Args:
+    - dataframe (pd.DataFrame): Dataset
+    - threshold_num (float): Minimum correlation threshold to consider numerical attributes as mutually correlated (Pearson's correlation)
+    - threshold_cat (float): Minimum correlation threshold to consider categorical attributes as mutually correlated (Cramer's V)
+    - threshold_numcat (float): Minimum correlation threshold to consider a high mutual correlation between a numerical and categorical attribute (eta squared)
+
+    Returns:
+    - dict: Dictionary where keys are pairs of attributes and values are their mutual correlation.
+    """
+    correlation_dict = {}
+
+    # Identify numerical and categorical columns
+    if 'Id' in dataframe.columns:
+        numerical_columns = dataframe.drop(['Id'], axis=1).select_dtypes(include=['number'])
+        categorical_columns = dataframe.drop(['Id'], axis=1).select_dtypes(include=['object', 'category'])
+    else:
+        numerical_columns = dataframe.select_dtypes(include=['number'])
+        categorical_columns = dataframe.select_dtypes(include=['object', 'category'])
+
+    # Numerical correlations (Pearson's)
+    corr_matrix = numerical_columns.corr()
+
+    # Mask diagonal and lower triangle to avoid redundant pairs
+    mask = np.triu(np.ones(corr_matrix.shape), k=1).astype(bool)
+
+    # Get pairs with absolute correlation above the threshold
+    for i, j in zip(*np.where((np.abs(corr_matrix) > threshold_num) & mask)):
+        attr1, attr2 = corr_matrix.index[i], corr_matrix.columns[j]
+        correlation_dict[(attr1, attr2)] = corr_matrix.iloc[i, j]
+
+    # Categorical correlations (Cramér's V)
+    for i, col1 in enumerate(categorical_columns.columns):
+        for col2 in categorical_columns.columns[i + 1:]:  # Avoid redundant pairs
+            v = cramers_v(dataframe[col1], dataframe[col2])
+            if v > threshold_cat:
+                correlation_dict[(col1, col2)] = v
+
+    # Numerical x Categorical correlations (Eta squared)
+    for cat_col in categorical_columns.columns:
+        for num_col in numerical_columns.columns:
+            try:
+                eta_sq_value = eta_squared(dataframe, cat_col, num_col)
+                if eta_sq_value > threshold_numcat:
+                    correlation_dict[(cat_col, num_col)] = eta_sq_value
+            except Exception:
+                # Skip problematic pairs (e.g., NaN or single-value columns)
+                continue
+
+    # Deduplicate pairs by sorting attributes within each pair
+    deduplicated_dict = {
+        tuple(sorted(pair)): value for pair, value in correlation_dict.items()
+    }
+
+    return deduplicated_dict
+
+
+def extract_mutually_correlated_groups(dataframe, threshold_num=0.80, threshold_cat=0.55, threshold_numcat=0.14):
+    """
+    Extract lists of mutually correlated attributes based on a correlation threshold.
+
+    Args:
+    - dataframe (pd.DataFrame): Dataset
+    - threshold_num (float): Minimum correlation threshold to consider numerical attributes as mutually correlated (Pearson's correlation)
+    - threshold_cat (float): Minimum correlation threshold to consider categorical attributes as mutually correlated (Cramer's V)
+    - threshold_numcat (float): Minimum correlation threshold to consider a high mutual correlation between a numerical and categorical attribute (eta squared)
+
+    Returns:
+    - list of lists: Each inner list contains mutually correlated attributes.
+    """
+    correlated_pairs = extract_mutually_correlated_pairs(dataframe, threshold_num, threshold_cat, threshold_numcat)
+
+    # Convert pairs to clusters using hierarchical clustering
+    if not correlated_pairs:
+        return []
+
+    # Initialize linkage and apply clustering on the correlated pairs
+    clusters = {}
+    for attr1, attr2 in correlated_pairs:
+        if attr1 in clusters:
+            clusters[attr1].append(attr2)
+        else:
+            clusters[attr1] = [attr2]
+
+    # Deduplicate and form lists of mutually correlated attributes
+    mutually_correlated_groups = []
+    seen = set()
+    for key, values in clusters.items():
+        group = set([key] + values)
+        if not group.intersection(seen):
+            mutually_correlated_groups.append(list(group))
+            seen.update(group)
+
+    return mutually_correlated_groups

@@ -63,3 +63,8 @@ if __name__ == '__main__':
         json.dump(log, json_file, indent=6)
     print("Embedding log in {} - save this file to ensure successful detection using the same parameters "
           "(Mind the secret).".format(args.log))
+RESULT_PATH = './result'
+
+if __name__ == '__main__':
+    print("Embedding fingerprint...")
+    print("Result in {}".format(RESULT_PATH))

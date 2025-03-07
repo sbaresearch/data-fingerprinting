@@ -61,9 +61,9 @@ python embedding.py speml/Financial_Records.csv 177264 10
 will run the embedding on the dataset speml/Financial_Records.csv with (your) secret key 177264 for the recipient with the ID=10 (for simplicity, we keep the user IDs as sequential integers).
 It will also read the example config file ```speml/config.json```. The embedding might take a few minutes.
 
-The fingerprinted data is by default written in ```fingerprinted_output.csv``` in the root directory (this can be changed by specifying argument ```--out [another_dest].csv```).
+The fingerprinted data is by default written in ```speml/fingerprinted_output.csv``` in the root directory (this can be changed by specifying argument ```--out [another_dest].csv```).
 
-The script will also output a ```log.json``` file consisting of the summary of used parameters. These exact parameters need to be used in the detection process for the correct fingerprint extraction (along with the correct secret key).
+The script will also output a ```speml/log.json``` file consisting of the summary of used parameters. These exact parameters need to be used in the detection process for the correct fingerprint extraction (along with the correct secret key).
 
 ### Fingerprint detection
 Run ```detection.py``` with arguments specifying:
@@ -75,15 +75,15 @@ Note that you _need_ to use the same parameters as in the embedding.
 
 Continuing from the embedding example, the command:
 ```
-python detection.py fingerprinted_output.csv 177264  
+python detection.py speml/fingerprinted_output.csv 177264  
 ```
-will run the detection algorithm on ```fingerprinted_output.csv``` file with your secret key 1177264. 
+will run the detection algorithm on ```speml/fingerprinted_output.csv``` file with your secret key 1177264. 
 The expected output is the ID of the user (in this case, 10) and detection confidence (1.0 for a perfect match).
 
 _Troubleshooting:_ If the detection fails in a seemingly normal scenario, it might be due to a couple of preventable reasons. 
 Firstly, the passed arguments and fingerprint parameters need to match exactly, so double-check the passed arguments and config file. 
 Secondly, sometimes the choice of parameters (mainly gamma and fingerprint length) is not robust enough for given dataset; the rule of thumb is to ensure #data_records/(gamma*fp_len)>20.
-If you run into other issues, feel free to [contact us]().
+If you run into other issues, feel free to contact us.
 
 ## References: 
 [1] Li, Y., Swarup, V. and Jajodia, S., 2005. Fingerprinting relational databases: Schemes and specialties. IEEE Transactions on Dependable and Secure Computing, 2(1), pp.34-45.\

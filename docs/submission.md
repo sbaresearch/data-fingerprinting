@@ -14,4 +14,4 @@ Deadlines and subsmission in TUWEL.
 
 _Note_: The exercise is evaluated based on the detail and the reproducibility of the report. 
 You are expected to describe your attempts (successful and failed), your thought process and reasoning and answer in detailed the questions associated to each phase.
-Attack success is an important factor, but will not be the deciding one when it comes to grading. 
+Attack success is an important factor, but will not be the deciding one when it comes to grading.

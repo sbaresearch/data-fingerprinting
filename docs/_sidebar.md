@@ -1,5 +1,5 @@
 - [Home](/)
-- [SPEML: Exercise 1](README.md)
+- [SPEML: Exercise 1](/)
   - [Phase 1](phase1.md)
   - [Phase 2](_phase2.md)
 - [Submission guidelines](submission.md)

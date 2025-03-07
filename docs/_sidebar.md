@@ -1,7 +1,6 @@
-- [SPEML: Exercise 1](/)
+- [SPEML: Exercise 1](readme.md)
   - [Phase 1](phase1.md)
   - [Phase 2](_phase2.md)
 - [Submission guidelines](submission.md)
 - [Datasets](datasets.md)
 - [Data fingerprinting](fingerprinting.md)
-

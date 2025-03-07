@@ -41,9 +41,9 @@ if __name__ == '__main__':
     # Optional parameters
     parser.add_argument("--gamma", type=float, default=11.0, help="Gamma value (optional)")
     parser.add_argument("--fp_len", type=int, default=256, help="Fingerprint length (optional)")
-    parser.add_argument("--out", default="speml/fingerprinted_output.csv", help="Output file (optional)")
+    parser.add_argument("--out", default="fingerprinted_output.csv", help="Output file (optional)")
     parser.add_argument("--config", default="speml/config.json", help="Configuration file (optional)")
-    parser.add_argument("--log", default="speml/log.json", help="Log file (optional)")
+    parser.add_argument("--log", default="log.json", help="Log file (optional)")
 
     args = parser.parse_args()
     # Load additional parameters from configuration file
@@ -63,8 +63,3 @@ if __name__ == '__main__':
         json.dump(log, json_file, indent=6)
     print("Embedding log in {} - save this file to ensure successful detection using the same parameters "
           "(Mind the secret).".format(args.log))
-RESULT_PATH = './result'
-
-if __name__ == '__main__':
-    print("Embedding fingerprint...")
-    print("Result in {}".format(RESULT_PATH))

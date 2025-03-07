@@ -63,7 +63,7 @@ def generate_codebook(n_users, secret_key, fp_len=None, epsilon=0.1):
     else:
         exit("You must provide the Tardos code length.")
         # todo: code_length = calculate_code_length(n_users, epsilon)
-    print("Code length: ", code_length)
+#    print("Code length: ", code_length)
 
     # Initialize the probability vector
     # - random vector from a beta distribution (with alpha=beta=0.5 it's a U-shaped distribution [0,1])

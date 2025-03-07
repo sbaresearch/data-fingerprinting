@@ -1,7 +1,28 @@
 import pandas as pd
+import hashlib
+import argparse
+import os
+import json
 
 
-def add_virtual_primary_key(csv_file_path):
+def secure_hash(value, secret):
+    """
+    Computes a secure, deterministic hash of the given value using SHA256.
+
+    Args:
+        value: The value to hash (will be converted to a string).
+
+    Returns:
+        int: The integer representation of the SHA256 hash.
+    """
+    s = str(secret) + str(value)
+    # Compute the SHA256 digest of the string
+    digest = hashlib.sha256(s.encode('utf-8')).hexdigest()
+    # Convert the hexadecimal digest to an integer
+    return int(digest, 16)
+
+
+def add_virtual_primary_key(csv_file_path, ignore=[], secret=None):
     """
     Reads a CSV file of tabular data, creates a virtual primary key for each row by:
       - Computing the hash (absolute value) of each cell (converted to string)
@@ -20,24 +41,27 @@ def add_virtual_primary_key(csv_file_path):
     df = pd.read_csv(csv_file_path)
 
     # Define maximum integer value (here we use 2^63 - 1)
-    MAX = 1048576  #2 ** 63 - 1
+    MAX = 6551093013089648576  #2 ** 63 - 1
 
-    def compute_virtual_pk(row, n_lowest_hashes=7):  # <--- adjust vpk parameters here
+    def compute_virtual_pk(row, n_lowest_hashes=4):
         # Compute absolute hash values for each cell (convert cell to string)
-        hash_values = [abs(hash(str(val))) for val in row]
+        row = row.drop(ignore)
+        hash_values_dict = {secure_hash(val, secret): val for val in row}  # optionally move the hash window
+#        print(hash_values)
         # Sort the hash values in ascending order
-        hash_values.sort()
-        # Take the three smallest values (or fewer if row has less than three values)
+        hash_values = sorted(list(hash_values_dict.keys()))
+        # Take the smallest values
         selected = hash_values[:n_lowest_hashes]
+#        print([hash_values_dict[s] for s in selected])
         # Combine them using prime multipliers to get a single integer.
         # (These primes are chosen arbitrarily to mix the numbers.)
         primes = [1000003, 1000033, 1000211, 1000231, 1000249, 1000253, 1000271, 1000289, 1000297]
         combined = 0
+#        print('----------')
         for i, h in enumerate(selected):
-            # combined += h
             combined += h * primes[i]
         # Return a value between 0 and MAX
-        return combined % MAX
+        return int(combined % MAX)
 
     # Apply the function to each row to create a new column "Id"
     df['Id'] = df.apply(compute_virtual_pk, axis=1)
@@ -51,8 +75,22 @@ def add_virtual_primary_key(csv_file_path):
 
 
 if __name__ == '__main__':
-    data_with_vpk = add_virtual_primary_key("datasets/adult_train.csv")
-    print(data_with_vpk.head(100))
+    parser = argparse.ArgumentParser(
+        description="Compute Virtual Primary Keys (VPKs) for CSV records, append them to the DataFrame, and print statistics.")
+    parser.add_argument("csv_file", help="Path to the CSV file.")
+    parser.add_argument("--ignore", nargs="*", default=[], help="List of attribute names to ignore.")
+    parser.add_argument("--secret", type=int, required=True, help="Secret key (integer).")
+    parser.add_argument("--log", default="vpk_log.json", help="Log file (optional)")
+    args = parser.parse_args()
+
+    #data_with_vpk = add_virtual_primary_key("datasets/adult_train.csv")
+    data_with_vpk = add_virtual_primary_key(args.csv_file, ignore=args.ignore, secret=args.secret)
+    #data_with_vpk = add_virtual_primary_key("fingerprinted_output_wo_vpk.csv")
     print(len(data_with_vpk['Id'].unique()))
     print(len(data_with_vpk['Id']))
-    data_with_vpk.to_csv("output_with_id.csv", index=False)
+    base, ext = os.path.splitext(args.csv_file)
+    output_file = f"{base}_VPK{ext}"
+    data_with_vpk.to_csv(output_file, index=False)
+    log = {"data": args.csv_file, "ignore": args.ignore, "**secret**": args.secret}
+    with open(args.log, "w") as json_file:
+        json.dump(log, json_file, indent=6)

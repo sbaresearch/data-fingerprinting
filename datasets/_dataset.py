@@ -1,7 +1,7 @@
-from abc import ABC
-from sklearn.preprocessing import LabelEncoder
+from abc import ABC, abstractmethod
 import pandas as pd
 import os
+from sklearn.preprocessing import LabelEncoder
 import utils
 
 
@@ -9,14 +9,13 @@ class Dataset(ABC):
     """
     Abstract class used to represent the dataset within the toolbox
     """
-    def __init__(self, target_attribute, path=None, dataframe=None, primary_key_attribute=None, correlated_attributes=None, name=None):
+    def __init__(self, target_attribute, path=None, dataframe=None, primary_key_attribute=None, correlated_attributes=None):
         if path is None and dataframe is None:
             raise ValueError('Error defining a data set! Please provide either a path or a Pandas DataFrame to '
                              'instantiate a data set')
 
         self.path = path
         self.dataframe = dataframe
-        self.name = name
 
         if self.path is not None and not isinstance(self.path, str):
             raise TypeError('Data set path must be a string value.')
@@ -28,7 +27,7 @@ class Dataset(ABC):
 
         if correlated_attributes is None:
             self.correlated_attributes = utils.extract_mutually_correlated_groups(self.dataframe,
-                                                                                threshold_num=0.70, threshold_cat=0.45)
+                                                                                  threshold_num=0.70, threshold_cat=0.45)
         else:
             self.correlated_attributes = correlated_attributes
         if not isinstance(self.dataframe, pd.DataFrame):
@@ -161,70 +160,38 @@ class Dataset(ABC):
     def get_types(self):
         return self.dataframe.dtypes
 
-    def dropna(self):
-        """
-        Dropping samples (rows) with missing values. Returns the Dataset object.
-        """
-        self.dataframe = self.dataframe.dropna()
-        return self
-
-    def drop(self, labels, axis=1):
-        """
-        Equivalent of pandas drop
-        """
-        if axis == 1:
-            self.dataframe = self.dataframe.drop(labels, axis=1)
-            self.columns = self.dataframe.columns
-            self.number_of_rows, self.number_of_columns = self.dataframe.shape
-            self._set_types()
-        elif axis == 0:
-            self.dataframe = self.dataframe.drop(labels, axis=0)
-            self.number_of_rows, self.number_of_columns = self.dataframe.shape
-        return self
-
-    def update_correlated_attributes(self, threshold):
-        corr_mtx = self.dataframe.drop(['Id'],
-                                       axis=1).corr() if 'Id' in self.dataframe.columns else self.dataframe.corr()
-        self.correlated_attributes = utils.extract_mutually_correlated_groups(corr_mtx, threshold=threshold)
-
 
 class GermanCredit(Dataset):
     def __init__(self):
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        path = os.path.join(script_dir, ' german_credit_full.csv')
+        path = 'datasets/german_credit_full.csv'
         super().__init__(path=path, target_attribute='target', primary_key_attribute='Id')
 
 
 class BreastCancerWisconsin(Dataset):
     def __init__(self):
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        path = os.path.join(script_dir, 'breast_cancer_wisconsin.csv')
+        path = os.path.dirname(os.path.realpath(__file__)) + '/breast_cancer_wisconsin.csv'
         super().__init__(path=path, target_attribute='class', primary_key_attribute='sample-code-number')
 
 
 class Adult(Dataset):
     def __init__(self):
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        path = os.path.join(script_dir, 'adult_train_id.csv')
-        super().__init__(path=path, name='adult', target_attribute='income', primary_key_attribute='Id')
+        path = 'datasets/adult.csv'
+        super().__init__(path=path, target_attribute='income')
 
 
 class BreastCancer(Dataset):
     def __init__(self):
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        path = os.path.join(script_dir, 'breast_cancer_full.csv')
+        path = 'datasets/breast_cancer_full.csv'
         super().__init__(path=path, primary_key_attribute='Id', target_attribute='recurrence')
 
 
 class Nursery(Dataset):
     def __init__(self):
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        path = os.path.join(script_dir, 'nursery_full.csv')
+        path = 'datasets/nursery_full.csv'
         super().__init__(path=path, primary_key_attribute='Id', target_attribute='target')
 
 
 class Mushrooms(Dataset):
     def __init__(self):
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        path = os.path.join(script_dir, 'mushroom_full.csv')
+        path = 'datasets/mushroom_full.csv'
         super().__init__(path=path, primary_key_attribute='Id', target_attribute='target')

@@ -8,9 +8,10 @@ import warnings
 from traceback import format_exc
 from astropy.table import Table
 from joblib import Parallel
+import datasets
 from copy import deepcopy
 
-from sklearn.utils.validation import _num_samples #_check_fit_params
+from sklearn.utils.validation import _num_samples # _check_fit_params,
 from sklearn.utils.metaestimators import _safe_split
 from sklearn.utils import indexable
 #from sklearn.utils.fixes import delayed
@@ -312,29 +313,6 @@ def fp_fit_and_score(estimator, X_original, y_original, X_fingerprinted, y_finge
     return result
 
 
-def read_data(dataset, primary_key_attribute=None, target_attribute=None, correlated_attributes=None):
-    '''
-    Creates the instance of Dataset for given data.
-    :param dataset: string, pandas dataframe or Dataset
-    :param primary_key_attribute: name of the primary key attribute
-    :param target_attribute: name of the target attribute
-    :return: Dataset instance
-    '''
-    relation = None
-    if isinstance(dataset, str):  # assumed the path is given
-        relation = datasets.Dataset(path=dataset, target_attribute=target_attribute,
-                           primary_key_attribute=primary_key_attribute, correlated_attributes=correlated_attributes)
-    elif isinstance(dataset, pd.DataFrame):  # assumed the pd.DataFrame is given
-        relation = datasets.Dataset(dataframe=dataset.copy(deep=True), target_attribute=target_attribute,
-                           primary_key_attribute=primary_key_attribute)
-    elif isinstance(dataset, datasets.Dataset):
-        relation = deepcopy(dataset)
-    else:
-        print('Error [utils._read_data]: Wrong type of input data: ' + str(type(dataset)))
-        exit()
-    return relation
-
-
 def fp_cross_val_score(estimator, X_original, y_original, X_fingerprint, y_fingerprint, cv=5, scoring=None, n_jobs=None,
                        verbose=0, pre_dispatch='2*n_jobs', groups=None, fit_params=None,  return_train_score=False,
                        return_estimator=False, error_score=np.nan):
@@ -397,12 +375,27 @@ def fp_cross_val_score(estimator, X_original, y_original, X_fingerprint, y_finge
 
     return ret
 
-
-def latex_to_pandas(path):
-    tab = Table.read(path).to_pandas()
-    # todo: in the latex version there might be necessary to remove some parts like \toprule
-    return tab
-
+def read_data(dataset, primary_key_attribute=None, target_attribute=None, correlated_attributes=None):
+    '''
+    Creates the instance of Dataset for given data.
+    :param dataset: string, pandas dataframe or Dataset
+    :param primary_key_attribute: name of the primary key attribute
+    :param target_attribute: name of the target attribute
+    :return: Dataset instance
+    '''
+    relation = None
+    if isinstance(dataset, str):  # assumed the path is given
+        relation = datasets.Dataset(path=dataset, target_attribute=target_attribute,
+                           primary_key_attribute=primary_key_attribute, correlated_attributes=correlated_attributes)
+    elif isinstance(dataset, pd.DataFrame):  # assumed the pd.DataFrame is given
+        relation = datasets.Dataset(dataframe=dataset.copy(deep=True), target_attribute=target_attribute,
+                           primary_key_attribute=primary_key_attribute)
+    elif isinstance(dataset, datasets.Dataset):
+        relation = deepcopy(dataset)
+    else:
+        print('Error [utils._read_data]: Wrong type of input data: ' + str(type(dataset)))
+        exit()
+    return relation
 
 def cramers_v(x, y):
     """
@@ -553,5 +546,3 @@ def extract_mutually_correlated_groups(dataframe, threshold_num=0.80, threshold_
             seen.update(group)
 
     return mutually_correlated_groups
-
-

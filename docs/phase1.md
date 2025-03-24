@@ -5,7 +5,7 @@ However, you have decided to go rogue :smiling_imp:. You want to redistribute th
 
 ## Key points:
 - :chart_with_upwards_trend: Keep It Useful: Choose utility metrics that ensure the dataset remains functional for predicting loan defaults. These metrics should remain high after your modifications. 
-- :hammer_and_wrench: Choose Your Strategy: You can apply any attack method—noise injection, shuffling, feature transformations, data augmentations, or even completely unconventional approaches.
+- :hammer_and_wrench: Choose Your Strategy: You can apply any attack method—noise injection, shuffling, feature transformations, data augmentations, assumptions or knowledge about the embedding algorithm, or even completely unconventional approaches.
 - :heavy_check_mark: Submit Your Attacked Dataset(s): You are free to submit multiple versions if you have different ideas on how to break the fingerprint.
 - :writing_hand: Explain Your Process: In a detailed report, describe:
   - Your thought process and reasoning.

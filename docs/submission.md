@@ -2,8 +2,8 @@
 
 Submission shall contain:
 - detailed documentation not exceeding 
-  - 3 pages for Phase 1
-  - 5 pages for Phase 2 
+  - 2 pages for Phase 1
+  - 3 pages for Phase 2 
 - code if applicable
 - attacked dataset(s) in .csv 
 

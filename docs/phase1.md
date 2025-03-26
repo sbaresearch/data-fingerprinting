@@ -25,8 +25,8 @@ After you are done attacking, answer the following questions:
 7. What was your biggest challenge in balancing fingerprint disruption and data utility?
 
 ## Submission:
-- documentation not exceeding 2 pages 
-- code if applicable
-- attacked dataset(s) in .csv 
+- documentation (not exceeding 2 pages)
+- code (scripts and corresponding output, e.g. a jupyter notebook with the results of the run(s), or otherwise saving the CLI output to a .txt file)
+- attacked dataset(s), each in a separate .csv following the same structure as the original file
 
 See full submission details [here](submission.md).

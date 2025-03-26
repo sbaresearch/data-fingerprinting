@@ -9,7 +9,7 @@ Fingerprints can be reliable tools for asserting ownership and tracing data leak
 ### Exercise description
 This exercise is organised into two phases:
 1. **Phase 1: Break the fingerprint!** -- In this phase you will get one fingerprinted dataset copy and act maliciously in the attempt to remove the fingerprint. See the details [here](phase1.md).
-2. **Phase 2: Collaboration attack** -- In this phase you will have access to multiple fingerprinted copies to achieve the same malicious goal. See the details [here](phase2.md).
+2. **Phase 2: Collusion attack** -- In this phase you will have access to multiple fingerprinted copies to achieve the same malicious goal. See the details [here](phase2.md).
 
 ### Submission guidelines
 The exercise is evaluated based on the detail and the reproducibility of the report. 

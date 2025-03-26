@@ -1,3 +1,3 @@
-# Phase 2: Collaboration attack
+# Phase 2: Collusion attack
 
 TBA

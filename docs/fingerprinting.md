@@ -56,9 +56,9 @@ Optional arguments include fingerprint parameters such as gamma (a probability o
 
 For example, the command:
 ```
-python embedding.py speml/Financial_Records.csv 177264 10 
+python embedding.py speml/Financial_Records_Demo.csv 177264 10 
 ```
-will run the embedding on the dataset speml/Financial_Records.csv with (your) secret key 177264 for the recipient with the ID=10 (for simplicity, we keep the user IDs as sequential integers).
+will run the embedding on the dataset speml/Financial_Records_Demo.csv with (your) secret key 177264 for the recipient with the ID=10 (for simplicity, we keep the user IDs as sequential integers).
 It will also read the example config file ```speml/config.json```. The embedding might take a few minutes.
 
 The fingerprinted data is by default written in ```speml/fingerprinted_output.csv``` in the root directory (this can be changed by specifying argument ```--out [another_dest].csv```).

@@ -1,7 +1,7 @@
 # Datasets
 
 ## Phase 1: 
-The fingerprinted dataset is available at: [Financial_Records.csv](https://github.com/sbaresearch/data-fingerprinting/blob/speml/docs/static/Financial_Records.csv)
+The fingerprinted dataset is available at: [Financial_Records.csv](https://raw.githubusercontent.com/sbaresearch/data-fingerprinting/refs/heads/speml/docs/static/Financial_Records.csv)
 
 This dataset represents credit scoring data. It includes both demographic and financial attributes for individuals, along with a binary target variable indicating credit risk. The dataset can be used for a credit scoring model. 
 

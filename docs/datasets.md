@@ -12,4 +12,6 @@ This dataset represents credit scoring data. It includes both demographic and fi
 - Target: `default` indicates the creditworthiness of the individual (1 = good, 2 = bad)
 
 ## Phase 2: 
-TBA 15.4.
+Datasets will be available on TUWEL starting April 10th. 
+
+The exceptions for late submission of Phase 1: The dataset will be available in TUWEL once you submit the Phase 1 report.

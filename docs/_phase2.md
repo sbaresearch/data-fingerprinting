@@ -37,8 +37,8 @@ After you are done attacking, answer the following questions:
 12. How does having multiple datasets help or complicate your attack?
 
 ## Submission
-- documentation not exceeding 3 pages 
-- code if applicable
-- attacked dataset(s) in .csv
+- documentation not exceeding 4 pages (even in case of collaborations, please each submit your own report)
+- code (scripts and corresponding output, e.g. a Jupyter notebook with the results of the run(s), or otherwise saving the CLI output to a .txt file)
+- attacked dataset(s), each in a separate .csv following the same structure as the original file
 
 See full submission details [here](submission.md).

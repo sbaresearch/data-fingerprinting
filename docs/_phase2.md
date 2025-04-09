@@ -1,4 +1,4 @@
-# Phase 2: Collaboration attack
+# Phase 2: Collusion attack
 
 In the previous phase, you worked alone, trying to manipulate your fingerprinted dataset to erase any traceable signatures. But now, the game has changed. 
 Your trusted collaborator Bob has secretly shared their fingerprinted copy with you. 

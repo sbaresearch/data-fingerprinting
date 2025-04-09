@@ -3,7 +3,7 @@
 Submission shall contain:
 - detailed documentation not exceeding 
   - 2 pages for Phase 1
-  - 3 pages for Phase 2 
+  - 4 pages for Phase 2 
 - code (scripts and corresponding output, e.g. a jupyter notebook with the results of the run(s), or otherwise saving the CLI output to a .txt file)
 - attacked dataset(s), each in a separate .csv following the same structure as the original file
   - Theses CSV files should be named like ex1_[phase#]\_[matriculation_number]\_[surname]\_[name]_[counter].csv (e.g. ex1_1_11825203_Musterman_Erika_1.csv)

@@ -1,6 +1,8 @@
 # [Fingerprinting Relational Data](https://www.google.com/maps/@43.7032839,15.726723,623m/data=!3m1!1e3)
 Fingerprinting toolbox is a library that allows embedding and extracting fingerprints into the relational data.
 
+:anchor: **This repository contains the official implementation of NCorr-FP. See: [NCorr-FP README.md](NCorrFP/README.md)**
+
 ## Usage
 You can use the toolbox by cloning this repository.
 ```

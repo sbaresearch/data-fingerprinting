@@ -1,14 +1,15 @@
 from abc import ABC, abstractmethod
+from sklearn.preprocessing import LabelEncoder
 import pandas as pd
 import os
-from sklearn.preprocessing import LabelEncoder
+import utils
 
 
 class Dataset(ABC):
     """
     Abstract class used to represent the dataset within the toolbox
     """
-    def __init__(self, target_attribute, path=None, dataframe=None, primary_key_attribute=None):
+    def __init__(self, target_attribute, path=None, dataframe=None, primary_key_attribute=None, correlated_attributes=None):
         if path is None and dataframe is None:
             raise ValueError('Error defining a data set! Please provide either a path or a Pandas DataFrame to '
                              'instantiate a data set')
@@ -21,6 +22,14 @@ class Dataset(ABC):
         elif self.path is not None:
             self.dataframe = pd.read_csv(self.path)
 
+        if not isinstance(self.dataframe, pd.DataFrame):
+            raise TypeError('Data frame must be type pandas.DataFrame')
+
+        if correlated_attributes is None:
+            self.correlated_attributes = utils.extract_mutually_correlated_groups(self.dataframe,
+                                                                            threshold_num=0.70, threshold_cat=0.45)
+        else:
+            self.correlated_attributes = correlated_attributes
         if not isinstance(self.dataframe, pd.DataFrame):
             raise TypeError('Data frame must be type pandas.DataFrame')
 

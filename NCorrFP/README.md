@@ -1,10 +1,10 @@
 ![ncorrfp-banner](figures/ncorrfp_banner.svg)
 ## Table of content
-1. [Overview](#1.-Overview)
-2. [Neighbourhood-based Correlation-preserving Fingerprinting](#2.-)
-3. [Getting started](#3.-Getting-stated)
-4. [Replicate our work]()
-5. [Cite our work]()
+1. [Overview](#1-overview)
+2. [Neighbourhood-based Correlation-preserving Fingerprinting](#2-neighbourhood-based-correlation-aware-fingerprinting-ncorr-fp)
+3. [Getting started](#3-getting-started)
+4. [Reproduce our work](#4-reproduce-our-analysis)
+5. [Cite our work](#5-cite-ncorr-fp)
 
 
 ## 1. Overview
@@ -130,8 +130,8 @@ Firstly, the passed arguments and fingerprint parameters need to match exactly, 
 Secondly, sometimes the choice of parameters (mainly gamma and fingerprint length) is not robust enough for given dataset; the rule of thumb is to ensure #data_records/(gamma*fp_len)>20.
 If you run into other issues, feel free to contact us.
 
-## 4. Replicate our analysis 
-1. Replicate fingerprinted datasets (fingerprint embedding):
+## 4. Reproduce our analysis 
+### 1. Reproduce fingerprinted datasets (fingerprint embedding):
 ```
 python NCorrFP/analysis/NCorrFP_embed_fingerprints.py adult  
 ```
@@ -140,21 +140,21 @@ The run parameters can be controlled by changing value of ```params``` in the sc
 All fingerprinted datasets are already available at ```NCorrFP/analysis/fp_datasets/NCorrFP/adult_fp.zip```).
 
 Having fingerprinted datasets witten in the destination folder is a preliminary for the steps 2-5.
-2. Replicate effectiveness 
+### 2. Reproduce effectiveness 
 ```
 python NCorrFP/analysis/NCorrFP_effectiveness.py adult  
 ```
 The run parameters can be controlled by changing value of ```params``` in the script.
 
 The results are written in ```NCorrFP/analysis/results/effectiveness_adult.csv```*. 
-3. Replicate fidelity
+### 3. Reproduce fidelity
 ```
 python NCorrFP/analysis/NCorrFP_fidelity.py adult  
 ```
 The run parameters can be controlled by changing value of ```params``` in the script. 
 
 The results are written in ```NCorrFP/analysis/results/fidelity_univariate_adult.csv``` and ```NCorrFP/analysis/results/fidelity_bivariate_adult.csv```*. 
-4. Replicate robustness
+### 4. Reproduce robustness
 ```
 python NCorrFP/analysis/NCorrFP_robustness.py adult  
 ```
@@ -162,13 +162,14 @@ The run parameters can be controlled by changing value of ```params``` in the sc
 
 The results are written in ```NCorrFP/analysis/results/robustness_[attack]_adult.csv```*. 
 
-5. Replicate utility
+### 5. Reproduce utility
 ```
 python NCorrFP/analysis/NCorrFP_utility.py adult  
 ```
 The results are written in ```NCorrFP/analysis/results/utility_adult.csv```*. 
 
-6. Replicate all figures and tables by running the notebook: ```NCorrFP/analysis/NCorrFP_analysis_adult.ipynb```
+### 6. Reproduce all figures and tables
+Reproduce all figures and tables by running the notebook: ```NCorrFP/analysis/NCorrFP_analysis_adult.ipynb```
 
 [*] The result files will have a timestamp in their name (e.g. ```effectiveness_adult_20250117150002.csv```) -- this is for differentiating the runs and should be removed.
 

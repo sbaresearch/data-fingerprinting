@@ -16,7 +16,6 @@ import copy
 from fp_codes import tardos
 from utils import *
 from fp_codes.tardos import *
-import datasets
 
 _MAXINT = 2**31 - 1
 
@@ -599,7 +598,7 @@ class NCorrFP():
         Returns: fingerprinted dataset (pandas.DataFrame)
 
         """
-        print("Start the NCorr fingerprint insertion algorithm. This might take a afew minutes.")
+        print("Start the NCorr fingerprint insertion algorithm. This might take a few minutes.")
         if secret_key is not None:
             self.secret_key = secret_key
         # it is assumed that the first column in the dataset is the primary key

@@ -21,8 +21,7 @@ from sklearn.exceptions import FitFailedWarning
 from sklearn.metrics._scorer import check_scoring, _check_multimetric_scoring
 from scipy.stats import chi2_contingency
 
-
-from datasets import Dataset
+import datasets
 
 
 # returns the pandas structure of the dataset and its primary key
@@ -129,12 +128,12 @@ def _read_data(dataset, primary_key_attribute=None, target_attribute=None):
     '''
     relation = None
     if isinstance(dataset, str):  # assumed the path is given
-        relation = Dataset(path=dataset, target_attribute=target_attribute,
+        relation = datasets.Dataset(path=dataset, target_attribute=target_attribute,
                            primary_key_attribute=primary_key_attribute)
     elif isinstance(dataset, pd.DataFrame):  # assumed the pd.DataFrame is given
-        relation = Dataset(dataframe=dataset, target_attribute=target_attribute,
+        relation = datasets.Dataset(dataframe=dataset, target_attribute=target_attribute,
                            primary_key_attribute=primary_key_attribute)
-    elif isinstance(dataset, Dataset):
+    elif isinstance(dataset, datasets.Dataset):
         relation = dataset
     else:
         print('Wrong type of input data.')
@@ -323,12 +322,12 @@ def read_data(dataset, primary_key_attribute=None, target_attribute=None, correl
     '''
     relation = None
     if isinstance(dataset, str):  # assumed the path is given
-        relation = Dataset(path=dataset, target_attribute=target_attribute,
+        relation = datasets.Dataset(path=dataset, target_attribute=target_attribute,
                            primary_key_attribute=primary_key_attribute, correlated_attributes=correlated_attributes)
     elif isinstance(dataset, pd.DataFrame):  # assumed the pd.DataFrame is given
-        relation = Dataset(dataframe=dataset.copy(deep=True), target_attribute=target_attribute,
+        relation = datasets.Dataset(dataframe=dataset.copy(deep=True), target_attribute=target_attribute,
                            primary_key_attribute=primary_key_attribute)
-    elif isinstance(dataset, Dataset):
+    elif isinstance(dataset, datasets.Dataset):
         relation = deepcopy(dataset)
     else:
         print('Error [utils._read_data]: Wrong type of input data: ' + str(type(dataset)))

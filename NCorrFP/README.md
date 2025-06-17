@@ -1,5 +1,13 @@
 ![ncorrfp-banner](figures/ncorrfp_banner.svg)
-## Overview
+## Table of content
+1. [Overview](#1.-Overview)
+2. [Neighbourhood-based Correlation-preserving Fingerprinting](#2.-)
+3. [Getting started](#3.-Getting-stated)
+4. [Replicate our work]()
+5. [Cite our work]()
+
+
+## 1. Overview
 A fingerprint is a personalised, secret piece of information identifying both the data owner and the recipient of the data. 
 By embedding the fingerprint into the data, the owner achieves two main goals: 
 1. **tracing of the unauthorised data redistributor**
@@ -16,7 +24,7 @@ The main properties of the fingerprinting system include:
 - robustness - the fingerprint can not be removed via benign data updates and malicious attacks without rendering the data useless
 - utility - the fingerprint introduces only minor, insignificant modifications to the data
 
-## Similarity-based fingerprinting
+## 2. **N**eighbourhood-based **Corr**elation-aware **F**inger**p**rinting (NCorr-FP) 
 Traditional fingerprinting methods [1,2] rely on pseudo-random modification of the data values and are originally designed for large numerical data, assuming a great embedding space. 
 Their effectiveness falls short for real-life datasets with limited domains, which is usually case for categorical types, and they affect the semantic coherence with newly embedded random values [3]. 
 Therefore, additional methods have been proposed that consider preserving statistical moments in the data, aiming to keep fingerprint robustness high in both single- and multi-attacker scenarios [4-6]. 
@@ -72,7 +80,7 @@ We then update the vote that the fingerprint bit at position 3 is 0 and continue
 The final fingerprint will be the majority vote over all fingerprint bits. Here is an example of the voting progression through the detection (note that sometimes errors can be made):
  ![demo-voting](figures/demo-voting.png)
 
-## Getting started 
+## 3. Getting started 
 ### Installation
 You can use the fingerprinting tool by cloning this repository:
 ```
@@ -122,7 +130,49 @@ Firstly, the passed arguments and fingerprint parameters need to match exactly, 
 Secondly, sometimes the choice of parameters (mainly gamma and fingerprint length) is not robust enough for given dataset; the rule of thumb is to ensure #data_records/(gamma*fp_len)>20.
 If you run into other issues, feel free to contact us.
 
-## Cite NCorr-FP
+## 4. Replicate our analysis 
+1. Replicate fingerprinted datasets (fingerprint embedding):
+```
+python NCorrFP/analysis/NCorrFP_embed_fingerprints.py adult  
+```
+The fingerprinted datasets are written in ```NCorrFP/analysis/fp_datasets/NCorrFP/adult_fp```. 
+The run parameters can be controlled by changing value of ```params``` in the script. 
+All fingerprinted datasets are already available at ```NCorrFP/analysis/fp_datasets/NCorrFP/adult_fp.zip```).
+
+Having fingerprinted datasets witten in the destination folder is a preliminary for the steps 2-5.
+2. Replicate effectiveness 
+```
+python NCorrFP/analysis/NCorrFP_effectiveness.py adult  
+```
+The run parameters can be controlled by changing value of ```params``` in the script.
+
+The results are written in ```NCorrFP/analysis/results/effectiveness_adult.csv```*. 
+3. Replicate fidelity
+```
+python NCorrFP/analysis/NCorrFP_fidelity.py adult  
+```
+The run parameters can be controlled by changing value of ```params``` in the script. 
+
+The results are written in ```NCorrFP/analysis/results/fidelity_univariate_adult.csv``` and ```NCorrFP/analysis/results/fidelity_bivariate_adult.csv```*. 
+4. Replicate robustness
+```
+python NCorrFP/analysis/NCorrFP_robustness.py adult  
+```
+The run parameters can be controlled by changing value of ```params``` in the script and choice of attacks to run can be made by choosing the respective function in the script. 
+
+The results are written in ```NCorrFP/analysis/results/robustness_[attack]_adult.csv```*. 
+
+5. Replicate utility
+```
+python NCorrFP/analysis/NCorrFP_utility.py adult  
+```
+The results are written in ```NCorrFP/analysis/results/utility_adult.csv```*. 
+
+6. Replicate all figures and tables by running the notebook: ```NCorrFP/analysis/NCorrFP_analysis_adult.ipynb```
+
+[*] The result files will have a timestamp in their name (e.g. ```effectiveness_adult_20250117150002.csv```) -- this is for differentiating the runs and should be removed.
+
+## 5. Cite NCorr-FP
 If you use NCorr-FP in your work, please cite our paper:
 ```bibtex
 @misc{ncorrfp,

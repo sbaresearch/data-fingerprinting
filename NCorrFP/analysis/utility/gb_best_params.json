@@ -1,0 +1,9 @@
+{"subsample": 1.0,
+  "n_estimators": 500,
+  "min_samples_split": 10,
+  "min_samples_leaf": 4,
+  "max_features": null,
+  "max_depth": 5,
+  "loss": "log_loss",
+  "learning_rate": 0.1,
+  "criterion": "friedman_mse"}

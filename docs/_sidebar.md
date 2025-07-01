@@ -4,4 +4,5 @@
 - [Submission guidelines](submission.md)
 - [Datasets](datasets.md)
 - [Data fingerprinting](fingerprinting.md)
-- [Leaderboard Phase 1](leaderboard_phase1.html)
+- [Leaderboard Phase 1](leaderboard_phase1.md)
+- [Leaderboard Phase 2](leaderboard_phase2.md)

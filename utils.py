@@ -6,7 +6,6 @@ import time
 import numbers
 import warnings
 from traceback import format_exc
-from astropy.table import Table
 from joblib import Parallel
 import datasets
 from copy import deepcopy
@@ -374,6 +373,7 @@ def fp_cross_val_score(estimator, X_original, y_original, X_fingerprint, y_finge
             ret[key] = train_scores_dict[name]
 
     return ret
+
 
 def read_data(dataset, primary_key_attribute=None, target_attribute=None, correlated_attributes=None):
     '''

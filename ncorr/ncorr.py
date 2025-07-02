@@ -530,9 +530,17 @@ class NCorrFP():
     # supports the dataset size of up to 1,048,576 entries
     __primary_key_len = 20
 
-    def __init__(self, gamma=1, xi=1, fingerprint_bit_length=32, number_of_recipients=100, distance_based=False,
-                 d=0, k=50, distance_metric_discrete="hamming", distance_metric_continuous='minkowski',
-                 fingerprint_code_type='hash'):
+    def __init__(self,
+                 gamma=1,
+                 xi=1,
+                 fingerprint_bit_length=128,
+                 number_of_recipients=100,
+                 distance_based=False,
+                 d=0,
+                 k=50,
+                 distance_metric_discrete="hamming",
+                 distance_metric_continuous='minkowski',
+                 fingerprint_code_type='tardos'):
         """
 
         Args:

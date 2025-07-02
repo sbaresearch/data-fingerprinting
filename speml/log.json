@@ -1,8 +1,8 @@
 {
-      "data": "speml/Financial_Records.csv",
+      "data": "speml/Financial_Records_Demo.csv",
       "gamma": 11.0,
       "fp_len": 256,
-      "user_id": 1,
+      "user_id": 10,
       "k": 50,
       "original_columns": [
             "person_id",
@@ -31,5 +31,5 @@
             "monthly_loan_installment",
             "loan_default"
       ],
-      "**secret**": 179
+      "**secret**": 177264
 }

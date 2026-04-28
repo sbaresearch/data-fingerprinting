@@ -12,7 +12,9 @@ This dataset represents credit scoring data. It includes both demographic and fi
 - Target: `default` indicates the creditworthiness of the individual (1 = good, 2 = bad)
 
 ## Phase 2: 
-The dataset will be available on TUWEL starting April 10th. As per details in [Phase 2 description](_phase2.md), the dataset is the same Financial Records dataset, this time containing a different fingerprint.
+The dataset will be available on TUWEL when Phase 2 commences. 
+
+<!-- As per details in [Phase 2 description](_phase2.md), the dataset is the same Financial Records dataset, this time containing a different fingerprint.
 
 The exceptions for late submission of Phase 1: The dataset will be available in TUWEL once you submit the Phase 1 report.
-
+-->

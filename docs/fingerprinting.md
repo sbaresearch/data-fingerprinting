@@ -73,11 +73,12 @@ The final fingerprint will be the majority vote over all fingerprint bits. Here 
  ![demo-voting](static/images/demo-voting.png)
 
 ## Fingerprint generation
-The input to the insertion (embedding) algorithm is a fingerprint: a bit sequence that encodes the owner's secret key and the recipient's ID. To create such a sequence, we need to make sure that (i) each recipient gets a unique fingerprint such that a unique recipient's ID can be recovered from the fingerprint and (ii) the sequence is secret. However, one additional requirement is key to resistance against collusion attacks (see: Vulnerabilities). The fingerprint should be designed such that it is possible to infer with some confidence if there was a collusion and which recipients colluded. We call these _collusion-resistant codes_.
+The input to the insertion (embedding) algorithm is a fingerprint: a bit sequence that encodes the owner's secret key and the recipient's ID. To create such a sequence, we need to make sure that (i) each recipient gets a unique fingerprint such that a unique recipient's ID can be recovered from the fingerprint and (ii) the sequence is secret. However, one additional requirement is key to resistance against collusion attacks<!-- (see: Vulnerabilities)-->. The fingerprint should be designed such that it is possible to infer with some confidence if there was a collusion and which recipients colluded. We call these _collusion-resistant codes_.
 Below is a summary of some fingerprint types:
 
 ![collusion](static/images/collusion.PNG)
 
+<!--
 ## Virtual record UID
 The PRNG-based methods, like this one, depend on the record UID to find the locations for marks and marks themselves. The records' UIDs might be crucial for the data table, so they are not always easily removable. However, they can still be prone to manipulation. In this case, the UIDs can be extracted from the record itself by e.g. combining a few attribute values into a representative, unique ID of the record.
 
@@ -145,3 +146,4 @@ If you run into other issues, feel free to contact us.
 [5] Kieseberg, P., Schrittwieser, S., Mulazzani, M., Echizen, I. and Weippl, E., 2014. An algorithm for collusion-resistant anonymization and fingerprinting of sensitive microdata. Electronic Markets, 24, pp.113-124.\
 [6] Ji, T., Ayday, E., Yilmaz, E. and Li, P., 2022. Towards robust fingerprinting of relational databases by mitigating correlation attacks. IEEE transactions on dependable and secure computing, 20(4), pp.2939-2953.\
 [7] Sarcevic, T. and Mayer, R., 2020. A correlation-preserving fingerprinting technique for categorical data in relational databases. In ICT Systems Security and Privacy Protection: 35th IFIP TC 11 International Conference, SEC 2020, Maribor, Slovenia, September 21–23, 2020, Proceedings 35 (pp. 401-415). Springer International Publishing.\
+-->

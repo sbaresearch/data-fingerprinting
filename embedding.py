@@ -41,6 +41,7 @@ if __name__ == '__main__':
     # Optional parameters
     parser.add_argument("--gamma", type=float, default=11.0, help="Gamma value (optional)")
     parser.add_argument("--fp_len", type=int, default=256, help="Fingerprint length (optional)")
+    parser.add_argument("--k", type=int, default=30, help="Number of nearest neighbors for fingerprint embedding embedding neighborhood search.")
     parser.add_argument("--out", default="speml/fingerprinted_output.csv", help="Output file (optional)")
     parser.add_argument("--config", default="speml/config.json", help="Configuration file (optional)")
     parser.add_argument("--log", default="speml/log.json", help="Log file (optional)")
@@ -51,14 +52,14 @@ if __name__ == '__main__':
     extra_params = {i: config.get(i, None) for i in ['correlated_attributes', 'k']}
 
     scheme = NCorrFP(gamma=args.gamma, fingerprint_bit_length=args.fp_len, fingerprint_code_type='tardos',
-                     k=extra_params["k"])
+                     k=args.k)
     data = args.data
     dataframe = pd.read_csv(data)
     fingerprinted_data = scheme.insertion(data, secret_key=args.secret_key, recipient_id=args.user_id,
                                           outfile=args.out, correlated_attributes=extra_params['correlated_attributes'])
     print("Result in {}".format(args.out))
     log = {"data": args.data, "gamma": args.gamma, "fp_len": args.fp_len, "user_id": args.user_id,
-           "k": extra_params["k"], "original_columns": list(dataframe.columns), "**secret**": args.secret_key}
+           "k": args.k, "original_columns": list(dataframe.columns), "**secret**": args.secret_key}
     with open(args.log, "w") as json_file:
         json.dump(log, json_file, indent=6)
     print("Embedding log in {} - save this file to ensure successful detection using the same parameters "

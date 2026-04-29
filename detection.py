@@ -39,15 +39,15 @@ if __name__ == '__main__':
     # Optional parameters
     parser.add_argument("--gamma", type=float, default=11.0, help="Gamma value (optional)")
     parser.add_argument("--fp_len", type=int, default=256, help="Fingerprint length (optional)")
+    parser.add_argument("--k", type=int, default=30, help="Number of nearest neighbors for fingerprint embedding embedding neighborhood search.")
     parser.add_argument("--config", default="speml/config.json", help="Configuration file (optional)")
 
     args = parser.parse_args()
     # Load additional parameters from configuration file
     config = load_config(args.config)
-    extra_params = {k: config.get(k, None) for k in ['correlated_attributes', 'original_columns', 'k']}
+    extra_params = {k: config.get(k, None) for k in ['correlated_attributes', 'original_columns']}
 
-    scheme = NCorrFP(gamma=args.gamma, fingerprint_bit_length=args.fp_len, fingerprint_code_type='tardos',
-                     k=extra_params['k'])
+    scheme = NCorrFP(gamma=args.gamma, fingerprint_bit_length=args.fp_len, fingerprint_code_type='tardos', k=args.k)
     data = args.data
 
     suspect = scheme.detection(data, secret_key=args.secret_key,

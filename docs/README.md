@@ -1,4 +1,4 @@
-# Security, Privacy & Explainability in ML (SPEML SS2025)
+# Security, Privacy & Explainability in ML (SPEML SS2026)
 ## Exercise: Attacking Data Fingerprints
 [Data fingerprints](fingerprinting.md) are used as a method for tracing unauthorised redistribution of the data and ownership protection.
 The fingerprint (sometimes also called a personalised watermark) is a bit-string that carries information about the legitimate owner of the data and the recipient of the specific copy and gets embedded into the content (data) via a secure pattern.

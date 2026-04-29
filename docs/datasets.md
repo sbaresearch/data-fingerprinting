@@ -1,15 +1,17 @@
 # Datasets
 
 ## Phase 1: 
-The fingerprinted dataset is available at: [Financial_Records.csv](https://raw.githubusercontent.com/sbaresearch/data-fingerprinting/refs/heads/speml/docs/static/Financial_Records.csv)
+The fingerprinted dataset is available in TUWEL.
 
-This dataset represents credit scoring data. It includes both demographic and financial attributes for individuals, along with a binary target variable indicating credit risk. The dataset can be used for a credit scoring model. 
+This dataset contains information whether a customer will fail to pay the next payment (Yes = 1, No = 0). It includes demographic information, as well as a payment history. It can be used to train a predictive model that will estimate failed payments for other customers.
 
-- Demographic attributes: `age`, `sex`, `marital_status`, `job`, `employment_since`, `foreign`
-- Financial behavior: `credit_history`, `credit_amount`, `purpose`, `duration`, `installment_rate`, `debtors`, `checking_account`, `savings` 
-- Living and credit circumstances: `housing`, `existing_credits`, `liable_people`, `property`, `residence_since`, `monthly_rent_or_mortgage`
-- Behavioral signals: `online_banking`, `tel`
-- Target: `default` indicates the creditworthiness of the individual (1 = good, 2 = bad)
+The data consists of the following:
+
+- Demographic attributes: sex (1 = male; 2 = female), education (1 = graduate school; 2 = university; 3 = high school; 4 = others), marital status (1 = married; 2 = single; 3 = others), age (year).
+- Amount of the given credit
+- History of past payment, descending from the most recent month
+- Amount of monthly bill, descending from the most recent month
+- Amount of previous payment, descending from the most recent month
 
 ## Phase 2: 
 The dataset will be available on TUWEL when Phase 2 commences. 
